@@ -35,7 +35,7 @@ jobs:
           mkdir -p _site
           python asbj_rss_generator.py \
             --output _site/asbj-information.xml \
-            --feed-url https://YOUR-USER.github.io/YOUR-REPO/asbj-information.xml
+            --feed-url https://likayuster.github.io/asbj-rss/asbj-information.xml
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
