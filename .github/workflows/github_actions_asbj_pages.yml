@@ -1,0 +1,54 @@
+name: Build and Deploy ASBJ RSS
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub recommends avoiding the start of the hour for scheduled workflows.
+    - cron: '17,47 * * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Generate RSS
+        run: |
+          mkdir -p _site
+          python asbj_rss_generator.py \
+            --output _site/asbj-information.xml \
+            --feed-url https://YOUR-USER.github.io/YOUR-REPO/asbj-information.xml
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
