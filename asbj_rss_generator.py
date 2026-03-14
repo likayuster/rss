@@ -27,7 +27,7 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 import requests
 from bs4 import BeautifulSoup
 
-BASE_URL = "https://www.asb-j.jp"
+BASE_URL = "http://www.asb-j.jp"
 LIST_URL = f"{BASE_URL}/jp/information.html"
 TIMEOUT = 30
 USER_AGENT = "Mozilla/5.0 (compatible; ASBJ-RSS-Generator/1.0; +https://example.invalid/)"
